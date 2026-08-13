@@ -8,20 +8,18 @@ VERSION="1.0"
 echo "Cleaning previous builds..."
 rm -rf Payload NoiosoAI-unsigned.ipa .build
 
-echo "Building via Swift Package Manager for iOS..."
-SDK_PATH=$(xcrun --sdk iphoneos --show-sdk-path)
-
-# Force Swift, Clang, and the Linker to strictly use the iOS SDK
-swift build -c release --product $APP_NAME --sdk "$SDK_PATH" --triple arm64-apple-ios15.0 -Xswiftc -parse-as-library -Xcc -isysroot -Xcc "$SDK_PATH" -Xlinker -syslibroot -Xlinker "$SDK_PATH"
-
-echo "Locating built binary..."
-BIN_PATH=$(swift build -c release --product $APP_NAME --sdk "$SDK_PATH" --triple arm64-apple-ios15.0 --show-bin-path -Xswiftc -parse-as-library -Xcc -isysroot -Xcc "$SDK_PATH" -Xlinker -syslibroot -Xlinker "$SDK_PATH")
+echo "Building via xcodebuild for iOS..."
+# xcodebuild natively handles Swift Packages and respects the iOS SDK
+xcodebuild -scheme $APP_NAME \
+           -destination "generic/platform=iOS" \
+           -configuration Release \
+           CONFIGURATION_BUILD_DIR="$(pwd)/.build/ios"
 
 echo "Creating standard iOS app bundle structure..."
 mkdir -p Payload/$APP_NAME.app
 
-# Copy the binary from the resolved path
-cp "$BIN_PATH/$APP_NAME" Payload/$APP_NAME.app/$APP_NAME
+# Copy the binary from xcodebuild's output directory
+cp .build/ios/$APP_NAME Payload/$APP_NAME.app/$APP_NAME
 
 # Ensure the binary has executable permissions
 chmod +x Payload/$APP_NAME.app/$APP_NAME
