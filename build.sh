@@ -12,10 +12,10 @@ echo "Configuring iOS SDK environment..."
 SDK_PATH=$(xcrun --sdk iphoneos --show-sdk-path)
 
 echo "Building via Swift Package Manager for iOS..."
-xcrun -sdk iphoneos swift build -c release --product $APP_NAME --target $APP_NAME
+xcrun -sdk iphoneos swift build -c release --product $APP_NAME
 
 echo "Locating built binary..."
-BIN_PATH=$(xcrun -sdk iphoneos swift build -c release --product $APP_NAME --target $APP_NAME --show-bin-path)
+BIN_PATH=$(xcrun -sdk iphoneos swift build -c release --product $APP_NAME --show-bin-path)
 
 echo "Creating standard iOS app bundle structure..."
 mkdir -p Payload/$APP_NAME.app
