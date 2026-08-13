@@ -14,13 +14,13 @@ swift build -c release --triple arm64-apple-ios15.0 --sdk $(xcrun --sdk iphoneos
 echo "Creating standard iOS app bundle structure..."
 mkdir -p Payload/$APP_NAME.app
 
-# Copy binary
+# Copy the binary and rename it to match the app name exactly
 cp .build/arm64-apple-ios/release/$APP_NAME Payload/$APP_NAME.app/$APP_NAME
 
 # Ensure the binary has executable permissions
 chmod +x Payload/$APP_NAME.app/$APP_NAME
 
-# Generate Info.plist
+# Generate a valid Info.plist with the required executable references
 cat <<EOF > Payload/$APP_NAME.app/Info.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -55,4 +55,4 @@ EOF
 
 echo "Zipping into .ipa..."
 zip -r NoiosoAI-unsigned.ipa Payload
-echo "Build complete!"
+echo "Build complete: NoiosoAI-unsigned.ipa created successfully!"
