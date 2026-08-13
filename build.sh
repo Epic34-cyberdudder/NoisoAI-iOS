@@ -5,23 +5,16 @@ APP_NAME="NoiosoAI"
 BUNDLE_ID="com.noioso.noiosoai.ios"
 VERSION="1.0"
 
-echo "Building Swift files..."
-swiftc \
-    -target arm64-apple-ios15.0 \
-    -sdk $(xcrun --sdk iphoneos --show-sdk-path) \
-    -module-name $APP_NAME \
-    -emit-executable \
-    -o $APP_NAME \
-    -parse-as-library \
-    -framework SwiftUI \
-    -framework UIKit \
-    -framework Foundation \
-    Sources/**/*.swift
+echo "Building via Swift Package Manager..."
+swift build -c release --triple arm64-apple-ios15.0 --sdk $(xcrun --sdk iphoneos --show-sdk-path)
 
 echo "Packaging .ipa structure..."
 mkdir -p Payload/$APP_NAME.app
-mv $APP_NAME Payload/$APP_NAME.app/
 
+# Move the compiled binary from SPM output directory
+cp .build/arm64-apple-ios/release/$APP_NAME Payload/$APP_NAME.app/
+
+# Generate Info.plist
 cat <<EOF > Payload/$APP_NAME.app/Info.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
