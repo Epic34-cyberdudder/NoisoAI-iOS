@@ -11,11 +11,11 @@ rm -rf Payload NoiosoAI-unsigned.ipa .build
 echo "Building via Swift Package Manager for iOS..."
 SDK_PATH=$(xcrun --sdk iphoneos --show-sdk-path)
 
-# Added -Xswiftc -parse-as-library to fix the SwiftUI @main entry point error
-swift build -c release --product $APP_NAME --sdk "$SDK_PATH" --triple arm64-apple-ios15.0 -Xswiftc -parse-as-library
+# Force Swift, Clang, and the Linker to strictly use the iOS SDK
+swift build -c release --product $APP_NAME --sdk "$SDK_PATH" --triple arm64-apple-ios15.0 -Xswiftc -parse-as-library -Xcc -isysroot -Xcc "$SDK_PATH" -Xlinker -syslibroot -Xlinker "$SDK_PATH"
 
 echo "Locating built binary..."
-BIN_PATH=$(swift build -c release --product $APP_NAME --sdk "$SDK_PATH" --triple arm64-apple-ios15.0 --show-bin-path -Xswiftc -parse-as-library)
+BIN_PATH=$(swift build -c release --product $APP_NAME --sdk "$SDK_PATH" --triple arm64-apple-ios15.0 --show-bin-path -Xswiftc -parse-as-library -Xcc -isysroot -Xcc "$SDK_PATH" -Xlinker -syslibroot -Xlinker "$SDK_PATH")
 
 echo "Creating standard iOS app bundle structure..."
 mkdir -p Payload/$APP_NAME.app
