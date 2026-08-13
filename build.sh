@@ -12,6 +12,10 @@ swiftc \
     -module-name $APP_NAME \
     -emit-executable \
     -o $APP_NAME \
+    -parse-as-library \
+    -framework SwiftUI \
+    -framework UIKit \
+    -framework Foundation \
     Sources/**/*.swift
 
 echo "Packaging .ipa structure..."
