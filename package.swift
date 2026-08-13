@@ -10,15 +10,15 @@ let package = Package(
         .executable(
             name: "NoiosoAI",
             targets: ["NoiosoAI"]
-        )
+        ),
+    ],
+    dependencies: [
+        // Add your dependencies here if any
     ],
     targets: [
         .executableTarget(
             name: "NoiosoAI",
-            path: "Sources",
-            swiftSettings: [
-                .unsafeFlags(["-parse-as-library"])
-            ]
-        )
+            dependencies: []
+        ),
     ]
 )

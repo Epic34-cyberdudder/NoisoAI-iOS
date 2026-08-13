@@ -8,17 +8,19 @@ VERSION="1.0"
 echo "Cleaning previous builds..."
 rm -rf Payload NoiosoAI-unsigned.ipa .build
 
-echo "Building via Swift Package Manager for iOS (explicit triple)..."
+echo "Configuring iOS SDK environment..."
 SDK_PATH=$(xcrun --sdk iphoneos --show-sdk-path)
-swift build -c release --product $APP_NAME --sdk "$SDK_PATH" --triple arm64-apple-ios15.0
+
+echo "Building via Swift Package Manager for iOS..."
+xcrun -sdk iphoneos swift build -c release --product $APP_NAME --target $APP_NAME
 
 echo "Locating built binary..."
-BIN_PATH=$(swift build -c release --product $APP_NAME --sdk "$SDK_PATH" --triple arm64-apple-ios15.0 --show-bin-path)
+BIN_PATH=$(xcrun -sdk iphoneos swift build -c release --product $APP_NAME --target $APP_NAME --show-bin-path)
 
 echo "Creating standard iOS app bundle structure..."
 mkdir -p Payload/$APP_NAME.app
 
-# Copy the binary from the exact resolved path
+# Copy the binary from the resolved path
 cp "$BIN_PATH/$APP_NAME" Payload/$APP_NAME.app/$APP_NAME
 
 # Ensure the binary has executable permissions
