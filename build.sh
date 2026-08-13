@@ -8,24 +8,25 @@ VERSION="1.0"
 echo "Cleaning previous builds..."
 rm -rf Payload NoiosoAI-unsigned.ipa .build
 
-echo "Building via Swift Package Manager..."
-swift build -c release --triple arm64-apple-ios15.0 --sdk $(xcrun --sdk iphoneos --show-sdk-path)
+echo "Building via Swift Package Manager for iOS..."
+SDK_PATH=$(xcrun --sdk iphoneos --show-sdk-path)
+swift build -c release --target $APP_NAME --sdk "$SDK_PATH" -Xswiftc -target -Xswiftc arm64-apple-ios15.0
 
 echo "Creating standard iOS app bundle structure..."
 mkdir -p Payload/$APP_NAME.app
 
-# Copy the binary and rename it to match the app name exactly
+# Copy the binary
 cp .build/arm64-apple-ios/release/$APP_NAME Payload/$APP_NAME.app/$APP_NAME
 
 # Ensure the binary has executable permissions
 chmod +x Payload/$APP_NAME.app/$APP_NAME
 
-# Generate a valid Info.plist with the required executable references
+# Generate Info.plist
 cat <<EOF > Payload/$APP_NAME.app/Info.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
+dict>
     <key>CFBundleIdentifier</key>
     <string>$BUNDLE_ID</string>
     <key>CFBundleName</key>
