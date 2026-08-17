@@ -3,6 +3,7 @@ import SwiftUI
 struct ChatView: View {
     @StateObject private var viewModel = ChatViewModel()
     @State private var showingSettings = false
+    @State private var showingClearConfirmation = false
     
     var body: some View {
         NavigationView {
@@ -51,7 +52,10 @@ struct ChatView: View {
                             .foregroundColor(.white)
                             .cornerRadius(24)
                             .disabled(viewModel.isLoading)
-                        
+                            .onSubmit {
+                                Task { await viewModel.sendMessage() }
+                            }
+
                         Button(action: {
                             Task { await viewModel.sendMessage() }
                         }) {
@@ -79,10 +83,20 @@ struct ChatView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack(spacing: 16) {
                         Button(action: {
-                            viewModel.messages.removeAll()
+                            showingClearConfirmation = true
                         }) {
                             Image(systemName: "trash.fill")
                                 .foregroundColor(Color(red: 0.9, green: 0.85, blue: 0.5))
+                        }
+                        .confirmationDialog(
+                            "Clear the entire conversation?",
+                            isPresented: $showingClearConfirmation,
+                            titleVisibility: .visible
+                        ) {
+                            Button("Clear Chat", role: .destructive) {
+                                viewModel.clearChat()
+                            }
+                            Button("Cancel", role: .cancel) {}
                         }
                         
                         Button(action: { showingSettings = true }) {

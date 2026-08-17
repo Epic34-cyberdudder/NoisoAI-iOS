@@ -13,7 +13,10 @@ class SettingsManager: ObservableObject {
     }
     
     init() {
-        self.hostUrl = UserDefaults.standard.string(forKey: "hostUrl") ?? "http://localhost:11434"
-        self.selectedModel = UserDefaults.standard.string(forKey: "selectedModel") ?? "llama3"
+        // Left blank by default rather than "localhost" - on a phone, localhost
+        // means the phone itself, not the PC running Ollama, which is a
+        // confusing trap for first-time setup.
+        self.hostUrl = UserDefaults.standard.string(forKey: "hostUrl") ?? ""
+        self.selectedModel = UserDefaults.standard.string(forKey: "selectedModel") ?? "llama3.2:1b"
     }
 }

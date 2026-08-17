@@ -21,11 +21,11 @@ Remote Access: If you want to use NoiosoAI from cellular data or outside your ho
 Now you're ready to start chatting with your LLM locally!
 
 🛠 Tech Stack
-UI: Jetpack Compose
-Network: Retrofit + OkHttp
-JSON: Moshi
-Async: Kotlin Coroutines & Flow
-Data: Jetpack DataStore
+UI: SwiftUI
+Network: URLSession (streaming chat responses)
+JSON: Codable
+Async: Swift Concurrency (async/await)
+Data: UserDefaults
 📸 Screenshots
 Screenshot_1 Screenshot_2
 

@@ -62,6 +62,15 @@ cat <<EOF > Payload/$APP_NAME.app/Info.plist
     </array>
     <key>UILaunchScreen</key>
     <dict/>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+        <key>NSAllowsLocalNetworking</key>
+        <true/>
+    </dict>
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>NoiosoAI connects to your Ollama server on your local network to send and receive chat messages.</string>
 </dict>
 </plist>
 EOF
